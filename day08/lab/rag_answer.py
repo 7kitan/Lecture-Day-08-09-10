@@ -211,32 +211,58 @@ def rerank(
 
 def transform_query(query: str, strategy: str = "expansion") -> List[str]:
     """
-    Biến đổi query để tăng recall.
-
-    Strategies:
-      - "expansion": Thêm từ đồng nghĩa, alias, tên cũ
-      - "decomposition": Tách query phức tạp thành 2-3 sub-queries
-      - "hyde": Sinh câu trả lời giả (hypothetical document) để embed thay query
-
-    TODO Sprint 3 (nếu chọn query transformation):
-    Gọi LLM với prompt phù hợp với từng strategy.
-
-    Ví dụ expansion prompt:
-        "Given the query: '{query}'
-         Generate 2-3 alternative phrasings or related terms in Vietnamese.
-         Output as JSON array of strings."
-
-    Ví dụ decomposition:
-        "Break down this complex query into 2-3 simpler sub-queries: '{query}'
-         Output as JSON array."
-
-    Khi nào dùng:
-    - Expansion: query dùng alias/tên cũ (ví dụ: "Approval Matrix" → "Access Control SOP")
-    - Decomposition: query hỏi nhiều thứ một lúc
-    - HyDE: query mơ hồ, search theo nghĩa không hiệu quả
+    Biến đổi query để tăng độ phủ (recall) khi tìm kiếm.
+    
+    Quy trình:
+    1. Gọi LLM để phân tích ý định (intent) của người dùng.
+    2. Tùy theo chiến thuật (strategy) để sinh ra các câu truy vấn mới:
+       - 'expansion': Thêm đồng nghĩa, tên khác (vd: 'mật khẩu' -> 'password', 'reset').
+       - 'decomposition': Tách câu phức thành nhiều câu đơn.
+       - 'hyde': Tự viết một câu trả lời mẫu rồi dùng nó để đi tìm tài liệu thật.
     """
-    # TODO Sprint 3: Implement query transformation
-    # Tạm thời trả về query gốc
+    if not strategy or strategy == "none":
+        return [query]
+
+    # Cần gọi LLM để xử lý
+    from index import call_openai_llm # Hoặc dùng helper call_llm đã có trong file
+
+    if strategy == "expansion":
+        prompt = f"""Bạn là một chuyên gia về IT Helpdesk. Hãy liệt kê 2-3 cách diễn đạt khác hoặc các từ khóa liên quan bằng tiếng Việt cho câu hỏi sau:
+Câu hỏi: '{query}'
+Yêu cầu: Chỉ trả về mảng JSON các chuỗi ký tự. Ví dụ: ["câu 1", "câu 2"]"""
+    
+    elif strategy == "decomposition":
+        prompt = f"""Hãy chia nhỏ câu hỏi phức tạp sau thành 2-3 câu hỏi đơn giản hơn để tìm kiếm trong cơ sở dữ liệu:
+Câu hỏi: '{query}'
+Yêu cầu: Chỉ trả về mảng JSON các chuỗi ký tự. Ví dụ: ["câu 1", "câu 2"]"""
+    
+    elif strategy == "hyde":
+        prompt = f"""Hãy viết một đoạn văn ngắn (2-3 câu) trả lời giả định cho câu hỏi sau để dùng làm dữ liệu tìm kiếm:
+Câu hỏi: '{query}'
+Trả lời giả định:"""
+        # Với HyDE, prompt trả về text, không phải JSON
+        try:
+            hyde_doc = call_llm(prompt)
+            return [query, hyde_doc] # Trả về cả query gốc và doc giả định
+        except:
+            return [query]
+
+    else:
+        return [query]
+
+    # Xử lý kết quả JSON cho expansion và decomposition
+    try:
+        import json
+        response = call_llm(prompt)
+        # Parse mảng JSON từ response
+        match = re.search(r'\[.*\]', response, re.DOTALL)
+        if match:
+            new_queries = json.loads(match.group())
+            # Luôn giữ lại câu hỏi gốc để đảm bảo an toàn
+            return list(set([query] + new_queries))
+    except:
+        pass
+
     return [query]
 
 
@@ -343,6 +369,8 @@ def rag_answer(
     top_k_search: int = TOP_K_SEARCH,
     top_k_select: int = TOP_K_SELECT,
     use_rerank: bool = False,
+    use_transform: bool = False,
+    transform_strategy: str = "expansion",
     verbose: bool = False,
 ) -> Dict[str, Any]:
     """
@@ -382,23 +410,41 @@ def rag_answer(
         "top_k_search": top_k_search,
         "top_k_select": top_k_select,
         "use_rerank": use_rerank,
+        "use_transform": use_transform,
+        "transform_strategy": transform_strategy,
     }
 
-    # --- Bước 1: Retrieve ---
-    if retrieval_mode == "dense":
-        candidates = retrieve_dense(query, top_k=top_k_search)
-    elif retrieval_mode == "sparse":
-        candidates = retrieve_sparse(query, top_k=top_k_search)
-    elif retrieval_mode == "hybrid":
-        candidates = retrieve_hybrid(query, top_k=top_k_search)
-    else:
-        raise ValueError(f"retrieval_mode không hợp lệ: {retrieval_mode}")
+    # --- Bước 0: Transform Query (Nếu bật) ---
+    queries = [query]
+    if use_transform:
+        if verbose: print(f"[Transform] Đang sử dụng chiến thuật: {transform_strategy}")
+        queries = transform_query(query, strategy=transform_strategy)
+        if verbose: print(f"[Transform] Các câu hỏi mới: {queries}")
+
+    # --- Bước 1: Tìm kiếm (Retrieve) ---
+    all_candidates = []
+    for q in queries:
+        if retrieval_mode == "dense":
+            all_candidates.extend(retrieve_dense(q, top_k=top_k_search))
+        elif retrieval_mode == "sparse":
+            all_candidates.extend(retrieve_sparse(q, top_k=top_k_search))
+        elif retrieval_mode == "hybrid":
+            all_candidates.extend(retrieve_hybrid(q, top_k=top_k_search))
+    
+    # Gộp và khử trùng lặp candidates
+    unique_candidates = {}
+    for cand in all_candidates:
+        key = (cand["text"], cand["metadata"].get("source"))
+        # Giữ lại candidate có score cao nhất nếu trùng lặp
+        if key not in unique_candidates or cand.get("score", 0) > unique_candidates[key].get("score", 0):
+            unique_candidates[key] = cand
+    
+    candidates = sorted(unique_candidates.values(), key=lambda x: x.get("score", 0), reverse=True)
+    candidates = candidates[:top_k_search * 2] # Giữ lại danh sách đủ rộng để rerank
 
     if verbose:
-        print(f"\n[RAG] Query: {query}")
-        print(f"[RAG] Retrieved {len(candidates)} candidates (mode={retrieval_mode})")
-        for i, c in enumerate(candidates[:3]):
-            print(f"  [{i+1}] score={c.get('score', 0):.3f} | {c['metadata'].get('source', '?')}")
+        print(f"\n[RAG] Query gốc: {query}")
+        print(f"[RAG] Đã tìm thấy {len(candidates)} đoạn văn bản sau khi gộp {len(queries)} truy vấn.")
 
     # --- Bước 2: Rerank (optional) ---
     if use_rerank:
