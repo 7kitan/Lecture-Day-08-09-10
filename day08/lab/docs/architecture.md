@@ -18,7 +18,7 @@
 ```
 
 **Mô tả ngắn gọn:**
-> TODO: Mô tả hệ thống trong 2-3 câu. Nhóm xây gì? Cho ai dùng? Giải quyết vấn đề gì?
+Hệ thống IT Helpdesk AI Assistant giúp nhân viên tra cứu nhanh các chính sách nội bộ, quy trình kỹ thuật và SLA. Hệ thống giải quyết vấn đề phản hồi chậm của con người bằng cách cung cấp câu trả lời tức thì, có trích dẫn nguồn dữ liệu chính xác.
 
 ---
 
@@ -27,22 +27,22 @@
 ### Tài liệu được index
 | File | Nguồn | Department | Số chunk |
 |------|-------|-----------|---------|
-| `policy_refund_v4.txt` | policy/refund-v4.pdf | CS | TODO |
-| `sla_p1_2026.txt` | support/sla-p1-2026.pdf | IT | TODO |
-| `access_control_sop.txt` | it/access-control-sop.md | IT Security | TODO |
-| `it_helpdesk_faq.txt` | support/helpdesk-faq.md | IT | TODO |
-| `hr_leave_policy.txt` | hr/leave-policy-2026.pdf | HR | TODO |
+| `policy_refund_v4.txt` | policy/refund-v4.pdf | CS | 6 |
+| `sla_p1_2026.txt` | support/sla-p1-2026.pdf | IT | 6 |
+| `access_control_sop.txt` | it/access-control-sop.md | IT Security | 6 |
+| `it_helpdesk_faq.txt` | support/helpdesk-faq.md | IT | 7 |
+| `hr_leave_policy.txt` | hr/leave-policy-2026.pdf | HR | 6 |
 
 ### Quyết định chunking
 | Tham số | Giá trị | Lý do |
 |---------|---------|-------|
-| Chunk size | TODO tokens | TODO |
-| Overlap | TODO tokens | TODO |
-| Chunking strategy | Heading-based / paragraph-based | TODO |
-| Metadata fields | source, section, effective_date, department, access | Phục vụ filter, freshness, citation |
+| Chunk size | ~1000 characters | Đảm bảo chứa đủ ngữ cảnh của một điều khoản hoặc Q&A. |
+| Overlap | 200 characters | Tránh mất thông tin tại ranh giới các chunk. |
+| Chunking strategy | Section-based + Paragraph-based | Ưu tiên tách theo tiêu đề "=== Section ===" |
+| Metadata fields | source, section, effective_date, department, access | Phục vụ filter, freshness, citation. |
 
 ### Embedding model
-- **Model**: TODO (OpenAI text-embedding-3-small / paraphrase-multilingual-MiniLM-L12-v2)
+- **Model**: OpenAI `text-embedding-3-small`
 - **Vector store**: ChromaDB (PersistentClient)
 - **Similarity metric**: Cosine
 
@@ -61,15 +61,13 @@
 ### Variant (Sprint 3)
 | Tham số | Giá trị | Thay đổi so với baseline |
 |---------|---------|------------------------|
-| Strategy | TODO (hybrid / dense) | TODO |
-| Top-k search | TODO | TODO |
-| Top-k select | TODO | TODO |
-| Rerank | TODO (cross-encoder / MMR) | TODO |
-| Query transform | TODO (expansion / HyDE / decomposition) | TODO |
+| Strategy | Hybrid (Dense + BM25) | Kết hợp tìm kiếm ngữ nghĩa và từ khóa chính xác. |
+| Top-k search | 10 | Như cũ. |
+| Top-k select | 3 | Như cũ. |
+| Rerank | Cross-Encoder | Sử dụng `ms-marco-MiniLM-L-6-v2`. |
 
 **Lý do chọn variant này:**
-> TODO: Giải thích tại sao chọn biến này để tune.
-> Ví dụ: "Chọn hybrid vì corpus có cả câu tự nhiên (policy) lẫn mã lỗi và tên chuyên ngành (SLA ticket P1, ERR-403)."
+Sử dụng Hybrid + Rerank giúp cải thiện độ chính xác đáng kể khi người dùng hỏi các từ chuyên ngành (như "SLA", "P1") hoặc các mã lỗi kỹ thuật.
 
 ---
 
@@ -96,8 +94,8 @@ Answer:
 ### LLM Configuration
 | Tham số | Giá trị |
 |---------|---------|
-| Model | TODO (gpt-4o-mini / gemini-1.5-flash) |
-| Temperature | 0 (để output ổn định cho eval) |
+| Model | `gpt-4o-mini` |
+| Temperature | 0 |
 | Max tokens | 512 |
 
 ---

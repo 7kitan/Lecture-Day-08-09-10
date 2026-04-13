@@ -168,9 +168,17 @@ def score_context_recall(
     found = 0
     missing = []
     for expected in expected_sources:
-        # Kiểm tra partial match (tên file)
-        expected_name = expected.split("/")[-1].replace(".pdf", "").replace(".md", "")
-        matched = any(expected_name.lower() in r.lower() for r in retrieved_sources)
+        # Normalize: lấy tên file và đổi - thành _ để khớp
+        expected_name = expected.split("/")[-1].replace(".pdf", "").replace(".md", "").replace("-", "_")
+        
+        matched = False
+        for r in retrieved_sources:
+            # Normalize retrieved source path
+            r_normalized = r.replace("-", "_").lower()
+            if expected_name.lower() in r_normalized:
+                matched = True
+                break
+        
         if matched:
             found += 1
         else:

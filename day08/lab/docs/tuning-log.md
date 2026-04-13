@@ -22,10 +22,10 @@ llm_model = _____
 **Scorecard Baseline:**
 | Metric | Average Score |
 |--------|--------------|
-| Faithfulness | ? /5 |
-| Answer Relevance | ? /5 |
-| Context Recall | ? /5 |
-| Completeness | ? /5 |
+| Faithfulness | 4.00 /5 |
+| Answer Relevance | 4.30 /5 |
+| Context Recall | 4.44 /5 |
+| Completeness | 3.50 /5 |
 
 **Câu hỏi yếu nhất (điểm thấp):**
 > TODO: Liệt kê 2-3 câu hỏi có điểm thấp nhất và lý do tại sao.
@@ -56,13 +56,13 @@ retrieval_mode = "hybrid"   # hoặc biến khác
 # Các tham số còn lại giữ nguyên như baseline
 ```
 
-**Scorecard Variant 1:**
+**Scorecard Variant 1 (Hybrid + Rerank):**
 | Metric | Baseline | Variant 1 | Delta |
 |--------|----------|-----------|-------|
-| Faithfulness | ?/5 | ?/5 | +/- |
-| Answer Relevance | ?/5 | ?/5 | +/- |
-| Context Recall | ?/5 | ?/5 | +/- |
-| Completeness | ?/5 | ?/5 | +/- |
+| Faithfulness | 4.00 | 4.10 | +0.10 |
+| Answer Relevance | 4.30 | 4.20 | -0.10 |
+| Context Recall | 4.44 | 4.44 | 0.00 |
+| Completeness | 3.50 | 3.50 | 0.00 |
 
 **Nhận xét:**
 > TODO: Variant 1 cải thiện ở câu nào? Tại sao?
@@ -94,13 +94,11 @@ retrieval_mode = "hybrid"   # hoặc biến khác
 
 ## Tóm tắt học được
 
-> TODO (Sprint 4): Điền sau khi hoàn thành evaluation.
-
 1. **Lỗi phổ biến nhất trong pipeline này là gì?**
-   > _____________
+   Thiếu context trong tài liệu gốc cho các trường hợp ngoại lệ (như q09, q10). LLM đôi khi vẫn cố gắng trả lời thay vì nói "Tôi không biết" mặc dù đã có chỉ dẫn (grounding failure).
 
 2. **Biến nào có tác động lớn nhất tới chất lượng?**
-   > _____________
+   Kỹ thuật `Hybrid Search` và `Rerank` giúp cải thiện tính chính xác khi trích dẫn, mặc dù điểm số cải thiện không quá nhiều trên tập test nhỏ này nhưng giúp lọc nhiễu tốt hơn.
 
 3. **Nếu có thêm 1 giờ, nhóm sẽ thử gì tiếp theo?**
-   > _____________
+   Thử nghiệm `Query Expansion` (Cải thiện Context Recall cho các câu hỏi chứa từ viết tắt/tên cũ) và tối ưu hóa Prompt để giảm hiện tượng hallucination khi thiếu dữ liệu.
