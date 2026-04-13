@@ -4,7 +4,7 @@
 **Thành viên:**
 | Tên | Vai trò | Email |
 |-----|---------|-------|
-| [Tên thành viên] | Tech Lead | ___ |
+| Nguyễn Tuấn Kiệt | Tech Lead | kiet.swe@gmail.com |
 | [Tên thành viên] | Retrieval Owner | ___ |
 | Nguyễn Văn Bách | Eval Owner | vanbachpk1@gmail.com |
 | Nguyễn Duy Hưng | Documentation Owner | hungngduy2003@gmail.com |
@@ -94,7 +94,7 @@ Quá trình làm việc nhóm diễn ra khá nhịp nhàng dù các sprint đòi
 
 | Thành viên | Phần đã làm | Sprint |
 |------------|-------------|--------|
-| [Tên thành viên] | Tech Lead - Nối code, config API | 1, 2 |
+| Nguyễn Tuấn Kiệt | Tech Lead - Nối code, config API | 1, 2 |
 | [Tên thành viên] | Retrieval Owner - Chunking, Rerank | 1, 3 |
 | Nguyễn Văn Bách | Eval Owner - Scorecard, A/B Test | 3 |
 | Nguyễn Duy Hưng | Documentation Owner - Architecture, Tuning Log, Group Report | 4 |
@@ -117,4 +117,3 @@ Nhóm sẽ tập trung vào **Prompt Tuning** cho tầng Generation. Bằng ch�
 ---
 
 *File này được hoàn thiện bởi Nguyễn Duy Hưng (Documentation Owner) cho Lab Day 08.*
-
