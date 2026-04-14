@@ -8,6 +8,7 @@
 |-----|---------|-------|
 | Nguyễn Tuấn Kiệt | Worker Owner | <kiet.swe@gmail.com> |
 | Nguyễn Văn Bách | Worker Owner | vanbachpk1@gmail.com |
+| Nguyễn Đức Duy| Supervisor Owner & Docs Owner | ducduynguyen1307@gmail.com |
 | Trần Trọng Giang | MCP Owner | <giang56b20@gmail.com>|
 | Nguyễn Duy Hưng | Trace & Docs Owner | <hungngduy2003@gmail.com> |
 
@@ -115,6 +116,7 @@ Trong file `graph.py`, Supervisor route chính xác task "CS Refund" vào Policy
 |------------|-------------|--------|
 | Nguyễn Tuấn Kiệt | `synthesis.py`, worker testing script | 2 |
 | Nguyễn Văn Bách | policy_tool.py | 2 |
+| Nguyễn Đức Duy| graph.py | 1 |
 | Trần Trọng Giang | mcp_server.py | 3 |
 | Nguyễn Duy Hưng | eval_trace.py, 2 doc templates: routing_decisions & single_vs_multi_comparison, group_report | 4 |
 
