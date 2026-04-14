@@ -8,7 +8,7 @@
 |-----|---------|-------|
 | Nguyễn Tuấn Kiệt | Worker Owner | <kiet.swe@gmail.com> |
 | Nguyễn Văn Bách | Worker Owner | vanbachpk1@gmail.com |
-| | | |
+| Trần Trọng Giang | MCP Owner | <giang56b20@gmail.com>|
 | Nguyễn Duy Hưng | Trace & Docs Owner | <hungngduy2003@gmail.com> |
 
 **Ngày nộp:** 14/04/2026
