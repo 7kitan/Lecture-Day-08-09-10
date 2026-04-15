@@ -32,7 +32,7 @@ from transform.cleaning_rules import clean_rows, load_raw_csv, write_cleaned_csv
 load_dotenv()
 
 ROOT = Path(__file__).resolve().parent
-RAW_DEFAULT = ROOT / "data" / "raw" / "policy_export_dirty.csv"
+RAW_DEFAULT = ROOT / "data" / "raw" / "policy_export_dirty_v2.csv"
 ART = ROOT / "artifacts"
 LOG_DIR = ART / "logs"
 MAN_DIR = ART / "manifests"
@@ -106,7 +106,7 @@ def cmd_run(args: argparse.Namespace) -> int:
     manifest = {
         "run_id": run_id,
         "run_timestamp": datetime.now(timezone.utc).isoformat(),
-        "raw_path": str(raw_path.relative_to(ROOT)),
+        "raw_path": str(raw_path.resolve().relative_to(ROOT)),
         "raw_records": raw_count,
         "cleaned_records": len(cleaned),
         "quarantine_records": len(quarantine),
