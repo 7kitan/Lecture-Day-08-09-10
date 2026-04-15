@@ -1,0 +1,16 @@
+chunk_id,doc_id,chunk_text,effective_date,exported_at
+policy_refund_v4_1_3b11f30cc4b49d25,policy_refund_v4,Yêu cầu được gửi trong vòng 7 ngày làm việc kể từ thời điểm xác nhận đơn hàng.,2026-02-01,2026-04-10T08:00:00
+policy_refund_v4_2_c96089a43e33aa9d,policy_refund_v4,Yêu cầu hoàn tiền được chấp nhận trong vòng 7 ngày làm việc kể từ xác nhận đơn (ghi chú: bản sync cũ policy-v3 — lỗi migration). [cleaned: stale_refund_window],2026-02-01,2026-04-10T08:00:00
+sla_p1_2026_3_ab622211ba880896,sla_p1_2026,Ticket P1 có SLA phản hồi ban đầu 15 phút và resolution trong 4 giờ.,2026-02-01,2026-04-10T08:00:00
+it_helpdesk_faq_4_ba09094c6802344b,it_helpdesk_faq,Tài khoản bị khóa sau 5 lần đăng nhập sai liên tiếp.,2026-02-01,2026-04-10T08:00:00
+hr_leave_policy_5_818ac82ac90f32fc,hr_leave_policy,Nhân viên dưới 3 năm kinh nghiệm được 12 ngày phép năm theo chính sách 2026.,2026-02-01,2026-04-10T08:00:00
+it_helpdesk_faq_6_76d38c1b20d4459f,it_helpdesk_faq,FAQ bổ sung: đổi mật khẩu qua portal self-service có thể mất tối đa 24 giờ để đồng bộ toàn hệ thống.,2026-02-01,2026-04-10T08:00:00
+it_helpdesk_faq_7_383d8d8ef89973ef,it_helpdesk_faq,Phần mềm VPN: Cisco AnyConnect.,2026-01-20,2026-04-15T11:00:00
+hr_leave_policy_8_f674ad92d3de58b7,hr_leave_policy,Nhân viên trên 5 năm được 15 ngày phép (SOP nói 15). [cleaned: no_stale_hr_leave_20d],2026-02-01,2026-04-15T11:00:00
+policy_refund_v4_9_7508a5e8f4f59a15,policy_refund_v4,Hoàn tiền voucher trong 14 ngày.,2026-02-01,2026-04-15T11:00:00
+it_helpdesk_faq_10_2b4e69b6df0faa17,it_helpdesk_faq,VPN download tại https://vpn.company.internal. [cleaned: html_tags],2026-01-20,2026-04-15T11:00:00
+sla_p1_2026_11_af5873d5272075e9,sla_p1_2026,Ticket P3 có SLA resolution trong 3 ngày.,2026-02-01,2026-04-15T11:00:00
+it_helpdesk_faq_12_161c0c41b3c18b01,it_helpdesk_faq,Laptop bị hỏng báo IT Room tầng 3 (SOP nói tầng 3). [cleaned: no_stale_it_floor_4],2026-01-20,2026-04-15T11:00:00
+hr_leave_policy_13_57fe78f44ab9cb64,hr_leave_policy,Nhân viên nghỉ việc thu hồi quyền ngay lập tức (SOP nói ngay lập tức). [cleaned: no_stale_hr_offboarding_7d],2026-02-01,2026-04-15T11:00:00
+sla_p1_2026_14_a0a0e610b566c674,sla_p1_2026,Dung lượng hòm thư 50GB (FAQ nói 50GB). [cleaned: no_stale_mailbox_100gb],2026-02-01,2026-04-15T11:00:00
+sla_p1_2026_15_d2db00680b34d0a5,sla_p1_2026,SLA resolution P1 là 4 giờ (SOP nói 4). [cleaned: no_stale_sla_p1_2h],2026-02-01,2026-04-15T11:00:00
