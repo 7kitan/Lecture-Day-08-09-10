@@ -1,16 +1,18 @@
 # Báo Cáo Nhóm — Lab Day 10: Data Pipeline & Data Observability
 
-**Tên nhóm:** ___________  
+**Tên nhóm:** Group C401-A03  
 **Thành viên:**
 | Tên | Vai trò (Day 10) | Email |
 |-----|------------------|-------|
-| ___ | Ingestion / Raw Owner | ___ |
-| ___ | Cleaning & Quality Owner | ___ |
-| ___ | Embed & Idempotency Owner | ___ |
-| ___ | Monitoring / Docs Owner | ___ |
+| Nguyễn Tuấn Kiệt | Tech Lead / Ingestion Owner | kiet.swe@gmail.com |
+| Nguyễn Xuân Hoàng | Cleaning & Quality Owner | hoangnx.hust@gmail.com |
+| Nguyễn Văn Bách | Eval Owner | vanbachpk1@gmail.com |
+| Nguyễn Đức Duy | Retrieval & Embed Owner | ducduynguyen1307@gmail.com |
+| Nguyễn Duy Hưng | Documentation Owner | hungngduy2003@gmail.com |
+| Trần Trọng Giang | Monitoring & Runbook Owner | giang56b20@gmail.com |
 
-**Ngày nộp:** ___________  
-**Repo:** ___________  
+**Ngày nộp:** 2026-04-15  
+**Repo:** https://github.com/7kitan/Lecture-Day-08-09-10  
 **Độ dài khuyến nghị:** 600–1000 từ
 
 ---
@@ -26,12 +28,10 @@
 > Nguồn raw là gì (CSV mẫu / export thật)? Chuỗi lệnh chạy end-to-end? `run_id` lấy ở đâu trong log?
 
 **Tóm tắt luồng:**
-
-_________________
+Pipeline Day 10 được xây dựng trên mô hình modular ingestion, tập trung vào tính quan sát (observability). Dữ liệu raw từ `policy_export_dirty.csv` (10 records) đi qua tầng `transform` để chuẩn hóa (ngày tháng, mapping doc_id), khử trùng (dedupe) và áp dụng các rule business fix (như window hoàn tiền). Kết quả được kiểm chứng bằng 8 expectations (chứa cả baseline và rule kỹ thuật mới) trước khi publish vào ChromaDB. Pipeline sinh ra log chi tiết và manifest JSON để phục vụ monitoring.
 
 **Lệnh chạy một dòng (copy từ README thực tế của nhóm):**
-
-_________________
+`python etl_pipeline.py run --run-id sprint1 && python eval_retrieval.py --out artifacts/eval/before_after_eval.csv`
 
 ---
 
@@ -41,17 +41,22 @@ _________________
 
 ### 2a. Bảng metric_impact (bắt buộc — chống trivial)
 
-| Rule / Expectation mới (tên ngắn) | Trước (số liệu) | Sau / khi inject (số liệu) | Chứng cứ (log / CSV / commit) |
-|-----------------------------------|------------------|-----------------------------|-------------------------------|
-| … | … | … | … |
+| Rule / Expectation mới | Trước (số liệu) | Sau / khi inject (số liệu) | Chứng cứ (log / CSV) |
+|-------------------------|------------------|-----------------------------|-----------------------|
+| Strip HTML Tags | 1 failure (bản bad) | cleaned text (strip noise) | `cleaned_sprint1.csv` |
+| HR Leave 20d -> 15d | data chứa 20d | data fix thành 15d | `run_sprint1.log` |
+| unique_chunk_id (halt) | N/A | Total metrics=6 | `run_sprint1.log` |
+| no_html_tags (halt) | N/A | Violations=0 | `run_sprint1.log` |
 
 **Rule chính (baseline + mở rộng):**
 
-- …
+- **Remove HTML Tags:** Tự động phát hiện và loại bỏ thẻ HTML để tránh noise cho embedding model.
+- **HR Policy Version Alignment:** Chỉnh sửa các lỗi logic về số ngày phép (20 -> 15) và offboarding time để đồng bộ với policy 2026.
+- **IT Floor Correction:** Update vị trí phòng IT từ Tầng 4 về Tầng 3 do thay đổi văn phòng.
+- **Expectations Halt:** Setup severity `halt` cho `no_html_tags` và `unique_chunk_id` để ngăn chặn dữ liệu rác/lỗi index được publish.
 
-**Ví dụ 1 lần expectation fail (nếu có) và cách xử lý:**
-
-_________________
+**Ví dụ 1 lần expectation fail và cách xử lý:**
+Khi chạy Sprint 3 với `--no-refund-fix`, expectation `refund_no_stale_14d_window` đã báo FAIL (1 violation). Tuy nhiên, team đã sử dụng `--skip-validate` để demo việc dữ liệu lỗi lọt vào vector store sẽ làm hỏng kết quả retrieval như thế nào (hits_forbidden=yes).
 
 ---
 
@@ -60,12 +65,17 @@ _________________
 > Bắt buộc: inject corruption (Sprint 3) — mô tả + dẫn `artifacts/eval/…` hoặc log.
 
 **Kịch bản inject:**
+Nhóm cố tình chạy pipeline với cờ `--no-refund-fix --skip-validate`. Tại đây, rule quan trọng giúp sửa lỗi "hoàn tiền 14 ngày" thành "7 ngày" bị bỏ qua, và system cũng bỏ qua bước validate halt để cho phép dữ liệu sai lệch này lọt vào ChromaDB (`run_id=inject-bad`).
 
-_________________
+**Kết quả định lượng (từ CSV eval):**
 
-**Kết quả định lượng (từ CSV / bảng):**
+| Question ID | Good Run (hits_forbidden) | Bad Run (hits_forbidden) | Ghi chú |
+|-------------|----------------------------|---------------------------|---------|
+| `q_refund_window` | **no** | **yes** | Bad run chứa cả chunk 14 ngày |
+| `q_p1_sla` | no | no | Không bị ảnh hưởng trực tiếp |
+| `q_leave_version` | no | no | Đã được lọc bởi rule HR stale |
 
-_________________
+Việc `hits_forbidden` chuyển sang **yes** là bằng chứng đanh thép cho thấy pipeline đã mất đi tính observability và để lọt dữ liệu stale vào production, ảnh hưởng trực tiếp đến câu trả lời của Agent.
 
 ---
 
@@ -93,9 +103,7 @@ freshness_check=FAIL {"latest_exported_at": "2026-04-10T08:00:00", "age_hours": 
 
 ## 5. Liên hệ Day 09 (50–100 từ)
 
-> Dữ liệu sau embed có phục vụ lại multi-agent Day 09 không? Nếu có, mô tả tích hợp; nếu không, giải thích vì sao tách collection.
-
-_________________
+Việc tách collection `day10_kb` giúp chúng tôi cô lập và kiểm soát chất lượng dữ liệu tốt hơn trước khi đẩy vào pipeline Day 09. Dữ liệu sau khi "Publish" (Embed xong + Manifest ghi nhận) sẽ được service `retrieval.py` của Day 09 truy vấn. Nhờ các rule cleaning mới, Agent Day 09 sẽ không còn bị nhầm lẫn giữa các vị trí phòng IT (Tầng 3 vs 4) hay số ngày phép, từ đó tăng độ tin cậy (Groundness) của hệ thống helpdesk.
 
 ---
 
