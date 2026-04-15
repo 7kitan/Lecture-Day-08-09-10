@@ -1,0 +1,32 @@
+chunk_id,doc_id,chunk_text,effective_date,exported_at
+1,policy_refund_v4,"Yêu cầu được gửi trong vòng 7 ngày làm việc kể từ thời điểm xác nhận đơn hàng.",2026-02-01,2026-04-10T08:00:00
+2,policy_refund_v4,"Yêu cầu được gửi trong vòng 7 ngày làm việc kể từ thời điểm xác nhận đơn hàng.",2026-02-01,2026-04-10T08:00:00
+3,policy_refund_v4,"Yêu cầu hoàn tiền được chấp nhận trong vòng 14 ngày làm việc kể từ xác nhận đơn (ghi chú: bản sync cũ policy-v3 — lỗi migration).",2026-02-01,2026-04-10T08:00:00
+4,sla_p1_2026,"Ticket P1 có SLA phản hồi ban đầu 15 phút và resolution trong 4 giờ.",2026-02-01,2026-04-10T08:00:00
+5,policy_refund_v4,"",,2026-04-10T08:00:00
+6,it_helpdesk_faq,"Tài khoản bị khóa sau 5 lần đăng nhập sai liên tiếp.",2026-02-01,2026-04-10T08:00:00
+7,hr_leave_policy,"Nhân viên dưới 3 năm kinh nghiệm được 10 ngày phép năm (bản HR 2025).",2025-01-01,2026-04-10T08:00:00
+8,hr_leave_policy,"Nhân viên dưới 3 năm kinh nghiệm được 12 ngày phép năm theo chính sách 2026.",2026-02-01,2026-04-10T08:00:00
+9,legacy_catalog_xyz_zzz,"Chunk nội dung đủ dài để vượt ngưỡng expectation độ dài tối thiểu trong cleaned export.",2026-02-01,2026-04-10T08:00:00
+10,it_helpdesk_faq,"FAQ bổ sung: đổi mật khẩu qua portal self-service có thể mất tối đa 24 giờ để đồng bộ toàn hệ thống.",01/02/2026,2026-04-10T08:00:00
+11,access_control_sop,"Quy trình Level 1 — Read Only: Áp dụng cho nhân viên mới trong 30 ngày đầu.",2026-01-01,2026-04-15T11:00:00
+11,access_control_sop,"Duplicate ID 11 — checking dedupe logic.",2026-01-01,2026-04-15T11:00:00
+12,access_control_sop,"Level 4 — Admin Access phê duyệt bởi IT Manager + CISO.",2026-01-01,2026-04-15T11:00:00
+13,unknown_system_xyz,"Hệ thống lạ để test quarantine.",2026-01-01,2026-04-15T11:00:00
+14,access_control_sop,"",2026-01-01,2026-04-15T11:00:00
+15,it_helpdesk_faq,"Mật khẩu phải được thay đổi mỗi 90 ngày.",01-01-2026,2026-04-15T11:00:00
+16,it_helpdesk_faq,"Hotline hỗ trợ ext. 9000.",,2026-04-15T11:00:00
+17,ACCESS_CONTROL_SOP,"Escalation khẩn cấp: Admin cấp quyền tạm thời 48h.",2025-12-31,2026-04-15T11:00:00
+18,it_helpdesk_faq,"Phần mềm VPN: Cisco AnyConnect.",2026-01-20,2026-04-15T11:00:00
+19,access_control_sop,"Review định kỳ mỗi 12 tháng.",2026-06-01,2026-04-15T11:00:00
+20,hr_leave_policy,"Nhân viên trên 5 năm được 20 ngày phép (SOP nói 15).",2026-02-01,2026-04-15T11:00:00
+21,policy_refund_v4,"  Hoàn tiền voucher trong 14 ngày.  ",2026-02-01,2026-04-15T11:00:00
+22,it_helpdesk_faq,"<b>VPN</b> download tại https://vpn.company.internal.",2026-01-20,2026-04-15T11:00:00
+23,sla_p1_2026,"Ticket P3 có SLA resolution trong 3 ngày.",2026-02-01,2026-04-15T11:00:00
+24,it_helpdesk_faq,"Laptop bị hỏng báo IT Room tầng 4 (SOP nói tầng 3).",2026-01-20,2026-04-15T11:00:00
+25,,Chunk thiếu doc_id.,2026-02-01,2026-04-15T11:00:00
+26,hr_leave_policy,"Nhân viên nghỉ việc thu hồi quyền trong 7 ngày (SOP nói ngay lập tức).",2026-02-01,2026-04-15T11:00:00
+27,sla_p1_2026,"Dung lượng hòm thư 100GB (FAQ nói 50GB).",2026-02-01,2026-04-15T11:00:00
+28,access_control_sop,"Bước 1: Tạo Jira ticket project ACCESS-IT-SYSTEMS.",2026-01-01,2026-04-15T11:00:00
+29,it_helpdesk_faq,"Tài khoản khóa sau 3 lần (FAQ nói 5).",2026/01/20,2026-04-15T11:00:00
+30,sla_p1_2026,"SLA resolution P1 là 2 giờ (SOP nói 4).",2026-02-01,2026-04-15T11:00:00
