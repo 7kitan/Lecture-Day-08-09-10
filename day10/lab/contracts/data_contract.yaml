@@ -38,6 +38,21 @@ quality_rules:
   - id: "unique_chunk_id"
     description: "Đảm bảo ID của mỗi chunk là duy nhất"
     severity: "halt"
+  - id: "no_stale_hr_leave_20d"
+    description: 'hr_leave_policy: "20 ngày phép" -> "15 ngày phép"'
+    severity: "halt"
+  - id: "no_stale_it_floor_4"
+    description: 'it_helpdesk_faq: "IT Room tầng 4" -> "IT Room tầng 3"'
+    severity: "halt"
+  - id: "no_stale_hr_offboarding_7d"
+    description: 'hr_leave_policy: "trong 7 ngày" -> "ngay lập tức"'
+    severity: "halt"
+  - id: "no_stale_mailbox_100gb"
+    description: 'sla_p1_2026: "hòm thư 100GB" -> "hòm thư 50GB"'
+    severity: "halt"
+  - id: "no_stale_sla_p1_2h"
+    description: 'sla_p1_2026: "resolution P1 là 2 giờ" -> "resolution P1 là 4 giờ"'
+    severity: "halt"
     
 
 freshness:

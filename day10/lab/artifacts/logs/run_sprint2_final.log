@@ -1,0 +1,19 @@
+run_id=sprint2_final
+raw_records=31
+cleaned_records=15
+quarantine_records=16
+cleaned_csv=artifacts\cleaned\cleaned_sprint2_final.csv
+quarantine_csv=artifacts\quarantine\quarantine_sprint2_final.csv
+expectation[min_one_row] OK (halt) :: cleaned_rows=15
+expectation[no_empty_doc_id] OK (halt) :: empty_doc_id_count=0
+expectation[refund_no_stale_14d_window] OK (halt) :: violations=0
+expectation[chunk_min_length_8] OK (warn) :: short_chunks=0
+expectation[effective_date_iso_yyyy_mm_dd] OK (halt) :: non_iso_rows=0
+expectation[hr_leave_no_stale_10d_annual] OK (halt) :: violations=0
+expectation[it_no_stale_floor] OK (halt) :: violations=0
+expectation[sla_correct_p1_resolution] OK (halt) :: violations=0
+expectation[no_html_tags] OK (halt) :: violations=0
+embed_upsert count=15 collection=day10_kb
+manifest_written=artifacts\manifests\manifest_sprint2_final.json
+freshness_check=PASS {"latest_exported_at": "2026-04-15T11:00:00", "age_hours": -1.906, "sla_hours": 24.0}
+PIPELINE_OK
